@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     s:String,
     recoveryParam:Number,
   },
+});
+const cstorageSchema = new mongoose.Schema({
+  coins : [String]
 })
 
-module.exports= {userSchema}
+module.exports= {userSchema,cstorageSchema}

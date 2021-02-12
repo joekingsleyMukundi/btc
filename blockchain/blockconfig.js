@@ -1,6 +1,6 @@
 require('dotenv').config();
 const hasher = require("../util/crypto_hash");
-const INITIAL_DIFFICULTY = 7;
+const INITIAL_DIFFICULTY = 4;
 const GENESIS_BLOCK={
   timestamp:Date.now(),
   lastHash:process.env.LASTHASH,
