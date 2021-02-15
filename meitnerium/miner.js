@@ -40,8 +40,8 @@ const miner = (deficit) => {
                 const timeDiffrence = coinTestTimestamp - PreviousCoinTimestamp;
                 if (timeDiffrence < mineRate) {
                   difficulty = coinTestDifficulty + 1;
-                  if (difficulty < 6) {
-                    difficulty = 6;
+                  if (difficulty < 5) {
+                    difficulty = 5;
                     const minedCoin = gen(difficulty);
                     cstorageModel().update(
                       {},
@@ -70,8 +70,8 @@ const miner = (deficit) => {
                   }
                 } else if (timeDiffrence > mineRate) {
                   difficulty = coinTestDifficulty - 1;
-                  if (difficulty < 6) {
-                    difficulty = 6;
+                  if (difficulty < 5) {
+                    difficulty = 5;
                     const minedCoin = gen(difficulty);
                     cstorageModel().update(
                       {},
@@ -114,19 +114,18 @@ const miner = (deficit) => {
   });
 };
 
-const initiater = (deficit) => {
+const initiator = (deficit) => {
   cstorageModel().find({}, (err, foundcoins) => {
     if (foundcoins.length === 0) {
       const Cstorage = cstorageModel();
       const coin = new Cstorage({
-        coins: JSON.stringify(gen()),
+        coins: JSON.stringify(gen(process.env.INITIALVALUE)),
       });
       coin.save((err) => {
         if (err) {
           console.log(err);
         } else {
           console.log("added the 1st coin lets add some more");
-          miner(deficit - 1);
         }
       });
     } else {
@@ -138,4 +137,4 @@ const initiater = (deficit) => {
   });
 };
 
-initiater(40);
+module.exports = { initiator };
