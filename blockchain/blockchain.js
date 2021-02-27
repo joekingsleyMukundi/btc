@@ -4,12 +4,29 @@ const hasher = require("../util/crypto_hash");
 class Blockchain {
   constructor() {
     this.chain = [Block.genesis()];
+    this.transactionPool = [];
+    this.currentNodeUrl;
+    this.networkNodes = [];
   }
+
+  setTransaction(transaction) {
+    const newTransaction = {
+      id: transaction.id,
+      transactions: transaction,
+    };
+    this.transactionPool.push(newTransaction);
+  }
+  getCurrentNode(nodeUrl) {
+    this.currentNodeUrl = nodeUrl;
+  }
+
   addBlock(data) {
     const newBlock = Block.generatedBlock({
       lastBlock: this.chain[this.chain.length - 1],
+      index: this.chain.length + 1,
       data: data,
     });
+    this.transactionPool = [];
     this.chain.push(newBlock);
   }
 
@@ -33,10 +50,19 @@ class Blockchain {
 
       const actualLastHash = chain[i - 1];
 
-      const { timestamp, lastHash, hash, data, nonce, difficulty } = Block;
+      const {
+        index,
+        timestamp,
+        lastHash,
+        hash,
+        data,
+        nonce,
+        difficulty,
+      } = Block;
       if (lastHash !== actualLastHash) return false;
 
       const validatedHash = hasher(
+        index,
         timestamp,
         lastHash,
         data,
@@ -49,4 +75,13 @@ class Blockchain {
     return true;
   }
 }
+// const block = new Blockchain();
+// const tra = {
+//   id: 0,
+//   amount: 10,
+//   hash: "byufttrdrdrtxrtdrt",
+// };
+// block.setTransaction(tra);
+// block.addBlock(tra);
+// console.log(block);
 module.exports = Blockchain;

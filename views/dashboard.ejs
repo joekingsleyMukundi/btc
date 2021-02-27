@@ -111,19 +111,19 @@
                                     <div class="user">
                                         <span class="thumb"><img src="images/profile/2.png" alt=""></span>
                                         <div class="user-info">
-                                            <h5>name</h5>
-                                            <span>email</span>
+                                            <h5><%= user.username %> </h5>
+                                            <span><%= user.email %> </span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="user-balance">
                                     <div class="available">
-                                        <p>Available</p>
+                                        <p><%= user.wallet.balance  %> </p>
                                         <span> MTN</span>
                                     </div>
                                     <div class="total">
-                                        <p>Total</p>
+                                        <p><%= user.wallet.balance * 500 %> </p>
                                         <span>KSH</span>
                                     </div>
                                 </div>
@@ -163,19 +163,19 @@
     <div class="menu">
         <ul>
             <li>
-                <a href="dashboard.html" data-toggle="tooltip" data-placement="right" title="Home">
+                <a href="/dashboard" data-toggle="tooltip" data-placement="right" title="Home">
                     <span><i class="bi bi-house"></i></span>
                 </a>
             </li>
-            <li><a href="trade.html" data-toggle="tooltip" data-placement="right" title="Trade">
+            <li><a href="/trade" data-toggle="tooltip" data-placement="right" title="Trade">
                     <span><i class="bi bi-globe2"></i></span>
                 </a>
             </li>
-            <li><a href="wallet.html" data-toggle="tooltip" data-placement="right" title="Wallet">
+            <li><a href="/wallet" data-toggle="tooltip" data-placement="right" title="Wallet">
                     <span><i class="bi bi-wallet2"></i></span>
                 </a>
             </li>
-            <li><a href="settings-profile.html" data-toggle="tooltip" data-placement="right" title="Settings">
+            <li><a href="/settings-profile" data-toggle="tooltip" data-placement="right" title="Settings">
                     <span><i class="bi bi-gear"></i></span>
                 </a>
             </li>
@@ -200,8 +200,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="page-title-content">
-                        <p>Welcome Back,
-                            <strong> name !</strong>
+                        <p>Welcome,
+                            <strong> <%= user.username %>  !</strong>
                         </p>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                             <div class="card welcome-profile">
                                 <div class="card-body">
                                     <img src="images/profile/2.png" alt="">
-                                    <h4>Hi, name !</h4>
+                                    <h4>Hi, <%= user.username %> !</h4>
                                     <p>Looks like you are not verified yet. Verify yourself to use the full potential of
                                         Tendex.</p>
 

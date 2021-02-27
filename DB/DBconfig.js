@@ -2,7 +2,7 @@ require("dotenv").config;
 const express = require("express");
 const mongoose = require("mongoose");
 const { userSchema, cstorageSchema } = require("./scheama");
-const { userModel, cstorageModel } = require("./models");
+const { userModel, cstorageModel, blockchainModel } = require("./models");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -32,4 +32,5 @@ module.exports = {
   passportLocalMongoose,
   userModel,
   cstorageModel,
+  blockchainModel,
 };

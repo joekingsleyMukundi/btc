@@ -96,10 +96,11 @@
                         <div class="signin-btn">
                             <% if(authenticated===false){%>
                                 <a class="btn btn-primary" href="/login">Sign in</a>
-                                <%}else{%>
-                                    <h3>welcome.Create your wallet</h3>
-                                <%} %> 
-                            
+                                <%}else if(authenticated===true&&wallet===true){%>
+                                    <a class="btn btn-primary" href="/logout">logout</a>
+                                <%}else if(authenticated===true&&wallet===false){%>
+                                    <h6>welcome.Create your wallet</h6>
+                                <%} %>
                         </div>
                     </nav>
                 </div>
