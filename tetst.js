@@ -66,3 +66,91 @@ if (foundusernode) {
     }
   );
 }
+
+app.get("/mine", (req, res) => {
+  if (req.isAuthenticated()) {
+    blockchainModel().find({}, (err, chainArry) => {
+      if (!err) {
+        if (chainArry) {
+          let dataObjects;
+          let dataObjectArray;
+          let lastBlock;
+          let index;
+          let poolLenth;
+          const transactions = [];
+          chainArry.forEach((chain) => {
+            poolLenth = chain.blockchain.transactionPool.length;
+            dataObjects = {
+              transaction: chain.blockchain.transactionPool,
+            };
+            dataObjectArray = dataObjects.transaction;
+            dataObjectArray.forEach((dataObject) => {
+              transaction = {
+                id: dataObject.id,
+                transactions: JSON.stringify(dataObject.transactions),
+              };
+              transactions.push(transaction);
+            });
+            const length = chain.blockchain.chain.length;
+            lastBlock = chain.blockchain.chain[length - 1];
+            index = length + 1;
+          });
+          const newMinedBlock = addBlock(lastBlock, index, transactions);
+          setTimeout(() => {
+            console.log(`hello`);
+          }, 2000);
+          blockchainModel().update(
+            {},
+            { $push: { "blockchain.chain": newMinedBlock } },
+            (err) => {
+              if (err) {
+                console.log(err);
+              } else {
+                chainArry.forEach((chain) => {
+                  let i;
+                  for (i = 0; i < poolLenth - 1; i++) {
+                    const transactionToPull =
+                      chain.blockchain.transactionPool[i];
+                    console.log(transactionToPull.id);
+                    // blockchainModel().update(
+                    //   {},
+                    //   {
+                    //     $pull: {
+                    //       "blockchain.transactionPool": transactionToPull,
+                    //     },
+                    //   },
+                    //   (err) => {
+                    //     if (err) {
+                    //       console.log(err);
+                    //     } else {
+                    //       console.log(`success`);
+                    //     }
+                    //   }
+                    // );
+                  }
+                });
+                // const MasterWallet = new Wallet();
+                // const amount = 100;
+                // const promiseCode = Math.floor(1000 + Math.random() * 9000);
+                // userModel().updateOne(
+                //   { _id: req.user.id },
+                //   { minerCode: promiseCode }
+                // );
+                // const link = `http://localhost:3000/miner/:${req.user.id}/rewd-cd/:${promiseCode}`;
+                // minerEmail(
+                //   req.user.email,
+                //   req.user.username,
+                //   amount,
+                //   MasterWallet.publicKey,
+                //   link
+                // );
+              }
+            }
+          );
+        }
+      }
+    });
+  } else {
+    console.log(`not authenticated`);
+  }
+});

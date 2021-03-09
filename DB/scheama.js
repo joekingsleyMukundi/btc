@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   username: String,
+  uniqueId: String,
   fullName: String,
   minerCode: Number,
   phone: String,
@@ -8,6 +9,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   country: String,
   password: String,
+  coins: [String],
   wallet: {
     balance: Number,
     keyPair: String,

@@ -5,14 +5,16 @@ const {
   passportLocalMongoose,
   userModel,
 } = require("../DB/DBconfig");
-const generator = require("../config/config");
+const { generator, UNIQID } = require("../config/config");
 const { signUpMailer } = require("../sendmail/sendmail");
 
 const signUp = (req, res) => {
   let otp = generator();
+  let uniqId = UNIQID();
   userModel().register(
     {
       username: req.body.username,
+      uniqueId: uniqId,
       email: req.body.email,
       otp: otp.otp,
       emailstatus: "not verified",

@@ -121,22 +121,29 @@
                     <p>Fast and secure way to purchase or exchange 150+ cryptocurrencies</p>
 
                     <div class="intro-btn">
-                        <a href="/wallet" class="btn btn-primary btn-sm py-2 px-3 me-3 shadow-sm">Create Wallet</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm py-2 px-3 shadow-sm">Browse Now</a>
+                        <% if (authenticated === false){%>
+                            <a href="/liveTrade" class="btn btn-primary btn-sm py-2 px-3 me-3 shadow-sm">View LiveTrade</a>
+                            <a href="/register" class="btn btn-outline-dark btn-sm py-2 px-3 shadow-sm">SignUp</a>
+                        <%}else if(authenticated===true&&wallet===true){%>
+                            <a href="/liveTrade" class="btn btn-primary btn-sm py-2 px-3 me-3 shadow-sm">TradeLive</a>
+                            <a href="/wallet" class="btn btn-outline-dark btn-sm py-2 px-3 shadow-sm">My Wallet</a>
+                        <%}else if(authenticated===true&&wallet===false){%>
+                            <a href="/liveTrade" class="btn btn-primary btn-sm py-2 px-3 me-3 shadow-sm">LiveTrade</a>
+                            <a href="/wallet" class="btn btn-outline-dark btn-sm py-2 px-3 shadow-sm">Create Wallet</a>
+                        <%} %>
                     </div>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-6 col-12">
                 <div class="intro-form-exchange">
-                    <form method="post" name="myform" class="currency_validate trade-form row g-3">
+                    <form action="/trade" method="post" name="myform" class="currency_validate trade-form row g-3">
                         <div class="col-12">
                             <label class="form-label">Send</label>
                             <div class="input-group">
                                 <select class="form-control" name="method">
                                     <option value="bank">USD</option>
-                                    <option value="master">Euro</option>
                                 </select>
-                                <input type="text" name="currency_amount" class="form-control" placeholder="0.0214 BTC">
+                                <input id='currencies' type="text" name="currency_amount" class="form-control" placeholder="0.0214 BTC">
                             </div>
                         </div>
 
@@ -144,16 +151,26 @@
                             <label class="form-label">Receive</label>
                             <div class="input-group">
                                 <select class="form-control" name="method">
-                                    <option value="bank">BTC</option>
-                                    <option value="master">ETH</option>
+                                    <option value="bank">MTN</option>
+                                    <option value="master">LTN</option>
                                 </select>
-                                <input type="text" name="currency_amount" class="form-control" placeholder="0.0214 BTC">
+                                <input id="crypto" type="text" name="currency_amount" class="form-control" placeholder="0.0214 BTC">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Payment Method</label>
+                            <div class="input-group">
+                                <select class="form-select" name="method">
+                                    <option value="Bank">Bank</option>
+                                    <option value="PayPal">PayPal</option>
+                                    <option value="M-pesa">M-pesa</option>
+                                </select>
                             </div>
                         </div>
 
-                        <p class="mb-0">1 USD ~ 0.000088 BTC <a href="#">Expected rate <br>No extra
+                        <p class="mb-0">1 MTN = 100KSH<a href="#">Expected rate <br>No extra
                                 fees</a></p>
-                        <button type="button" class="btn btn-primary ">
+                        <button  type="submit" class="btn btn-primary ">
                             Buy Now
                         </button>
 
@@ -185,7 +202,7 @@
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
                 <div class="getstart-content">
                     <span><i class="bi bi-pencil-square"></i></span>
-                    <h3>Link your bank account</h3>
+                    <h3>Create an offer</h3>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis.</p>
                     <a href="#">Explore <i class="bi bi-arrow-right-short"></i></a>
                 </div>
@@ -738,7 +755,18 @@
 
 
 
+<script type="text/javascript">
+function data(){
+    var input1 = document.getElementById('currencies').value;
+    var input2 = document.getElementById('crypto');
 
+    var input3 = input1 * 100;
+
+    input2.value=input3;
+}
+ setInterval(data,1000);
+
+  </script>
 <script src="js/scripts.js"></script>
 
 

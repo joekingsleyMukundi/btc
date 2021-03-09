@@ -16,7 +16,7 @@ const {
   userModel,
   blockchainModel,
 } = require("./DB/DBconfig");
-const generator = require("./config/config");
+const { generator } = require("./config/config");
 const { loginMailer } = require("./sendmail/sendmail");
 const Transaction = require("./wallet/transactions");
 const Blockchain = require("./blockchain/blockchain");
@@ -364,34 +364,37 @@ app.get("/dashboard", (req, res) => {
     res.redirect("/login");
   }
 });
-
 //wallet creation
 app.get("/wallet", (req, res) => {
   if (req.isAuthenticated()) {
-    const userWallet = new Wallet();
-    let signature = userWallet.sign(req.user);
-    signature = {
-      r: JSON.stringify(signature.r),
-      s: JSON.stringify(signature.s),
-      recoveryParam: signature.recoveryParam,
-    };
-    const wallet = {
-      balance: userWallet.balance,
-      keyPair: JSON.stringify(userWallet.keyPair),
-      publicKey: userWallet.publicKey,
-    };
-    userModel().updateOne(
-      { _id: req.user.id },
-      { wallet: wallet, signature: signature },
-      (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("wallet and signature succefully created");
-          res.redirect("/dashboard");
+    if (req.user.wallet.publicKey === undefined) {
+      const userWallet = new Wallet();
+      let signature = userWallet.sign(req.user);
+      signature = {
+        r: JSON.stringify(signature.r),
+        s: JSON.stringify(signature.s),
+        recoveryParam: signature.recoveryParam,
+      };
+      const wallet = {
+        balance: userWallet.balance,
+        keyPair: JSON.stringify(userWallet.keyPair),
+        publicKey: userWallet.publicKey,
+      };
+      userModel().updateOne(
+        { _id: req.user.id },
+        { wallet: wallet, signature: signature },
+        (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("wallet and signature succefully created");
+            res.redirect("/dashboard");
+          }
         }
-      }
-    );
+      );
+    } else {
+      res.render("wallet");
+    }
   } else {
     res.redirect("/login");
   }
@@ -539,39 +542,46 @@ app.post("/transaction", (req, res) => {
   }
 });
 
-//mine
-app.get("/mine", (req, res) => {
-  if (req.isAuthenticated()) {
-    blockchainModel().find({}, (err, chainArry) => {
-      if (!err) {
-        if (chainArry) {
-          let dataObjects;
-          let dataObjectArray;
-          let lastBlock;
-          let index;
-          let poolLenth;
+const miner = () => {
+  blockchainModel().find({}, (err, blockchainArry) => {
+    if (err) {
+      console.log(err);
+    } else {
+      blockchainArry.forEach((blockchain) => {
+        const transactionPool = blockchain.blockchain.transactionPool;
+        const blockchainObj = blockchain.blockchain.chain;
+        if (transactionPool.length != 0) {
           const transactions = [];
-          chainArry.forEach((chain) => {
-            poolLenth = chain.blockchain.transactionPool.length;
-            dataObjects = {
-              transaction: chain.blockchain.transactionPool,
+          let transactionToPull;
+          transactionPool.forEach((transactionObject) => {
+            const transaction = {
+              id: transactionObject.id,
+              transactions: JSON.stringify(transactionObject.transactions),
             };
-            dataObjectArray = dataObjects.transaction;
-            dataObjectArray.forEach((dataObject) => {
-              transaction = {
-                id: dataObject.id,
-                transactions: JSON.stringify(dataObject.transactions),
-              };
-              transactions.push(transaction);
-            });
-            const length = chain.blockchain.chain.length;
-            lastBlock = chain.blockchain.chain[length - 1];
-            index = length + 1;
+            transactions.push(transaction);
+            transactionToPull = {
+              id: transactionObject.id,
+              transactions: transactionObject.transactions,
+            };
+            blockchainModel().update(
+              {},
+              { $pull: { "blockchain.transactionPool": transactionToPull } },
+              (err) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(
+                    `success in pulling transaction with id ${transactionToPull.id}`
+                  );
+                }
+              }
+            );
           });
+          const len = blockchainObj.length;
+          const lastBlock = blockchainObj[len - 1];
+          const index = len + 1;
           const newMinedBlock = addBlock(lastBlock, index, transactions);
-          setTimeout(() => {
-            console.log(`hello`);
-          }, 2000);
+          console.log(newMinedBlock);
           blockchainModel().update(
             {},
             { $push: { "blockchain.chain": newMinedBlock } },
@@ -579,121 +589,21 @@ app.get("/mine", (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                chainArry.forEach((chain) => {
-                  let i;
-                  for (i = 0; i < poolLenth - 1; i++) {
-                    const transactionToPull =
-                      chain.blockchain.transactionPool[i];
-                    console.log(transactionToPull.id);
-                    // blockchainModel().update(
-                    //   {},
-                    //   {
-                    //     $pull: {
-                    //       "blockchain.transactionPool": transactionToPull,
-                    //     },
-                    //   },
-                    //   (err) => {
-                    //     if (err) {
-                    //       console.log(err);
-                    //     } else {
-                    //       console.log(`success`);
-                    //     }
-                    //   }
-                    // );
-                  }
-                });
-                // const MasterWallet = new Wallet();
-                // const amount = 100;
-                // const promiseCode = Math.floor(1000 + Math.random() * 9000);
-                // userModel().updateOne(
-                //   { _id: req.user.id },
-                //   { minerCode: promiseCode }
-                // );
-                // const link = `http://localhost:3000/miner/:${req.user.id}/rewd-cd/:${promiseCode}`;
-                // minerEmail(
-                //   req.user.email,
-                //   req.user.username,
-                //   amount,
-                //   MasterWallet.publicKey,
-                //   link
-                // );
+                console.log(`succefully added anew mined block  `);
               }
             }
           );
+        } else {
+          console.log("no transaction");
         }
-      }
-    });
-  } else {
-    console.log(`not authenticated`);
-  }
-});
+      });
+    }
+  });
+};
 
-// app.post("/node/:id/register-and-broadcast-node", (req, res) => {
-//   const newNodeUrl = req.body.newNodeUrl;
-//   if (Meitnerium.networkNodes.indexOf(newNodeUrl) == -1) {
-//     Meitnerium.networkNodes.push(newNodeUrl);
-//   }
-//   const regNodesPromises = [];
-//   Meitnerium.networkNodes.forEach((networkNodeUrl) => {
-//     const requestOptions = {
-//       uri: networkNodeUrl + "/register-node",
-//       method: "POST",
-//       body: { newNodeUrl: newNodeUrl },
-//       json: true,
-//     };
-//     regNodesPromises.push(rp(requestOptions));
-//   });
-//   Promise.all(regNodesPromises)
-//     .then((data) => {
-//       const bulkRegiserOptions = {
-//         url: newNodeUrl + "/register-node-bulk ",
-//         method: "POST",
-//         body: {
-//           allNetwokNodes: [
-//             ...Meitnerium.networkNodes,
-//             Meitnerium.currentNodeUrl,
-//           ],
-//         },
-//         json: true,
-//       };
-//       return rp(bulkRegiserOptions);
-//     })
-//     .then((data) => {
-//       res.send("success");
-//     });
-// });
-
-// app.post("/node/:id/register-node", (req, res) => {
-//   const newNodeUrl = req.body.newNodeUrl;
-//   if (
-//     Meitnerium.networkNodes.indexOf(newNodeUrl) == -1 &&
-//     Meitnerium.currentNodeUrl !== newNodeUrl
-//   ) {
-//     Meitnerium.networkNodes.push(newNodeUrl);
-//   }
-// });
-
-// app.post("/node/:id/register-node-bulk", (req, res) => {
-//   const allNetwokNodes = req.body.allNetwokNodes;
-//   allNetwokNodes.forEach((newNodeUrl) => {
-//     if (
-//       Meitnerium.networkNodes.indexOf(newNodeUrl) == -1 &&
-//       Meitnerium.currentNodeUrl !== newNodeUrl
-//     ) {
-//       Meitnerium.networkNodes.push(newNodeUrl);
-//     }
-//   });
-// });
-
-//routes
-
-//test
-// const wallet = new Wallet();
-// const signo = wallet.sign();
-// const recipient = "ygytrcr";
-// const amount = 50;
-// const transaction = createTransaction({ wallet, recipient, amount }, signo);
-// console.log(transaction);
+setInterval(() => {
+  miner();
+}, 120000);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

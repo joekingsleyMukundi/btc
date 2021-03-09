@@ -111,7 +111,7 @@
                                     <div class="user">
                                         <span class="thumb"><img src="images/profile/2.png" alt=""></span>
                                         <div class="user-info">
-                                            <h5><%= user.username %> </h5>
+                                            <h5><%= user.uniqueId %> </h5>
                                             <span><%= user.email %> </span>
                                         </div>
                                     </div>
@@ -201,7 +201,7 @@
                 <div class="col-xl-12">
                     <div class="page-title-content">
                         <p>Welcome,
-                            <strong> <%= user.username %>  !</strong>
+                            <strong> <%= user.uniqueId %>  !</strong>
                         </p>
                     </div>
                 </div>
@@ -214,9 +214,8 @@
                             <div class="card welcome-profile">
                                 <div class="card-body">
                                     <img src="images/profile/2.png" alt="">
-                                    <h4>Hi, <%= user.username %> !</h4>
-                                    <p>Looks like you are not verified yet. Verify yourself to use the full potential of
-                                        Tendex.</p>
+                                    <h4>Hi, <%= user.uniqueId %> !</h4>
+                                    <p>Wellcome to the dashboard,You can monitor your growth and create your very own crypto portfolio.Trust.</p>
 
                                     <ul>
                                         <li>
@@ -227,14 +226,14 @@
                                         </li>
                                         <li>
                                             <a href="#">
-                                                <span class="not-verified"><i class="icofont-close-line"></i></span>
-                                                Two-factor authentication (2FA)
+                                                <span class="verified"><i class="icofont-check"></i></span>
+                                                Create A Wallet
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#">
                                                 <span class="not-verified"><i class="icofont-close-line"></i></span>
-                                                Deposit money
+                                                Two-factor authentication (2FA)
                                             </a>
                                         </li>
                                     </ul>
@@ -254,9 +253,8 @@
                                             <div class="input-group">
                                                 <select class="form-select" name="method">
                                                     <option value="bank">USD</option>
-                                                    <option value="master">Euro</option>
                                                 </select>
-                                                <input type="text" name="currency_amount" class="form-control"
+                                                <input type="text" id="currency" name="currency_amount" class="form-control"
                                                     placeholder="0.0214 BTC">
                                             </div>
                                         </div>
@@ -265,15 +263,34 @@
                                             <label class="form-label">You get</label>
                                             <div class="input-group">
                                                 <select class="form-select" name="method">
-                                                    <option value="bank">BTC</option>
-                                                    <option value="master">ETH</option>
+                                                    <option value="bank">MTN</option>
+                                                    <option value="master">LTN</option>
                                                 </select>
-                                                <input type="text" name="currency_amount" class="form-control"
+                                                <input type="text" id="crypto" name="currency_amount" class="form-control"
                                                     placeholder="0.0214 BTC">
                                             </div>
                                         </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Payment Method</label>
+                                            <div class="input-group">
+                                                <select class="form-select" name="method">
+                                                    <option value="Bank">Bank</option>
+                                                    <option value="PayPal">PayPal</option>
+                                                    <option value="M-pesa">M-pesa</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Mode</label>
+                                            <div class="input-group">
+                                                <select class="form-select" name="method">
+                                                    <option value="Buy">Buy</option>
+                                                    <option value="Sell">Sell</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                        <p class="mb-0">1 USD ~ 0.000088 BTC <a href="#">Expected rate <br>No extra
+                                        <p class="mb-0">1 MTN = 100KSH <a href="#">Expected rate <br>No extra
                                                 fees</a></p>
 
                                         <button type="submit" name="submit" class="btn btn-primary btn-block">Exchange
@@ -295,14 +312,14 @@
                                             <h5>Opening Cost</h5>
                                             <div class="text-end">
                                                 <h5>$0.0000</h5>
-                                                <span>Original cost of all open positions.</span>
+                                                <span>Initial funding amount</span>
                                             </div>
                                         </li>
                                         <li>
                                             <h5>Current Valuation</h5>
                                             <div class="text-end">
                                                 <h5>$0.0000</h5>
-                                                <span>Paper valuation of all open positions.</span>
+                                                <span>Current account balance. </span>
                                             </div>
                                         </li>
                                         <li>
@@ -323,7 +340,7 @@
                                             <h5>Fees</h5>
                                             <div class="text-end">
                                                 <h5>$0.0000</h5>
-                                                <span>Current Fee</span>
+                                                <span>Total fees encountered</span>
                                             </div>
                                         </li>
                                     </ul>
@@ -336,8 +353,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="invite-content">
-                                        <h4>Invite a friend and get $30</h4>
-                                        <p>You will receive up to $30 when they：
+                                        <h4>Invite a friend and get $0.5 worth of coins</h4>
+                                        <p>You will receive up to 0.5 MTN when they：
                                             1.Buy
                                             Crypto 2. Deposit 3. Finish Trading Tasks <br><a href="#">Learn more</a>
 
@@ -346,9 +363,9 @@
                                         <div class="copy-link">
                                             <form action="#">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control"
-                                                        value="https://www.tendex.io/join/12345">
-                                                    <span class="input-group-text">Copy</span>
+                                                    <input type="text" id="copyRefLink" class="form-control"
+                                                        value='http://localhost:3000/join/<%=user.id%>'>
+                                                    <span  onclick="copyFunction()" class="input-group-text">Copy</span>
                                                 </div>
                                             </form>
                                         </div>
@@ -389,11 +406,12 @@
                             <div class="card home-chart">
                                 <div class="card-header">
                                     <h4 class="card-title home-chart">Analytics</h4>
+                                   
                                     <select class="form-select" name="report-type" id="report-select">
-                                        <option value="1">Bitcoin</option>
-                                        <option value="2">Litecoin</option>
+                                        <option value="1">Meitnerium</option>
+                                        <option value="2">Lotearn</option>
                                     </select>
-
+                                   
                                 </div>
                                 <div class="card-body">
                                     <div class=" home-chart-height">
@@ -401,25 +419,25 @@
                                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                                                 <div class="chart-price-value">
                                                     <span>24hr Volume</span>
-                                                    <h5>$236,368.00</h5>
+                                                    <h5>$0USD</h5>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                                                 <div class="chart-price-value">
                                                     <span>Marketcap</span>
-                                                    <h5>$236.025B USD</h5>
+                                                    <h5>$0USD</h5>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                                                 <div class="chart-price-value">
                                                     <span>24hr Volume</span>
-                                                    <h5>56.3 BTC</h5>
+                                                    <h5>0MTN</h5>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                                                 <div class="chart-price-value">
                                                     <span>All Time High</span>
-                                                    <h5>$236,368.00</h5>
+                                                    <h5>$0USD</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -762,8 +780,33 @@
 
 
 
+<script type="text/javascript">
+    function data(){
+        var input1 = document.getElementById('currency').value;
+        var input2 = document.getElementById('crypto');
+    
+        var input3 = input1 * 100;
+    
+        input2.value=input3;
+    }
+     setInterval(data,1000);
+
+     function copyFunction(){
+
+     var copyLink = document.getElementById("copyRefLink")
+     /*select the text field*/
+     copyLink.select();
+     copyLink.setSelectionRange(0,999999)/*for mobile*/
+     /*copy the text inside text field*/
+     document.execCommand('copy');
+     /* alert copied text*/
+     alert('Copied the the text: ' + copyLink.value)
+     }
+      </script>
 
 <script src="js/scripts.js"></script>
+
+
 
 
 </body>
