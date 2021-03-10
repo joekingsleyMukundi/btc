@@ -8,6 +8,8 @@ const login = require("./routesconfig/loginconfig");
 const otpAuth = require("./routesconfig/otpverification");
 const { addBlock } = require("./blockchain/addblock");
 const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
 const {
   db,
   session,
@@ -31,7 +33,6 @@ const {
   minerEmail,
 } = require("./sendmail/sendmail");
 const singIn = require("./routesconfig/loginconfig");
-const rp = require("request-promise");
 
 //creating our blockchaininstance
 
@@ -606,6 +607,13 @@ setInterval(() => {
 }, 120000);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log(`user connected`);
+  setInterval(() => {
+    const randomNumber = Math.random();
+    io.emit("randomValue", randomNumber);
+  }, 1000);
+});
+http.listen(port, () => {
   console.log(`server live at port${port}`);
 });

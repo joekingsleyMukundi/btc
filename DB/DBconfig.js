@@ -8,7 +8,8 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
 const db = () => {
-  const mongoDB = "mongodb://localhost:27017/meitnerium";
+  const mongoDB =
+    "mongodb+srv://admin-joe:Mukundijoe254@cluster0.by3q3.mongodb.net/meitnerium";
   mongoose.connect(mongoDB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

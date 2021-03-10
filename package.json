@@ -9,6 +9,9 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "12.19.0"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "crypto": "^1.0.1",
@@ -26,6 +29,7 @@
     "passport-local-mongoose": "^6.1.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
+    "socket.io": "^4.0.0",
     "uuid": "^8.3.2"
   }
 }
