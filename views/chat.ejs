@@ -12,6 +12,8 @@
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <!-- font awsome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
 
         <!-- magnific-popup css -->
         <link href="assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
@@ -29,6 +31,36 @@
         <!-- App Css-->
         <link href="assets/css/app-dark.min.css" id="app-dark-style" rel="stylesheet" type="text/css" />
         <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        <style type='text/css'>
+            @keyframes up-right {
+                0% {/*from w w w .  j  a va 2  s. c  o m*/
+                    transform: scale(1);
+                    opacity: .25
+                }
+                50% {
+                    transform: scale (1, 5);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: .25;
+                }
+            }
+            .circle {
+                border-radius: 50%;
+                width: 10px;
+                height: 10px;
+                opacity: .25;
+            }
+            .red {
+                background-color: blue;
+                position: absolute;
+                -webkit-animation: up-right 1s infinite;
+                -moz-animation: up-right 1s infinite;
+                -o-animation: up-right 1s infinite;
+                animation: up-right 1s infinite;
+            }
+            </style>
 
 
     </head>
@@ -45,15 +77,16 @@
                         <!-- Start chats content -->
                         <div>
                             <div class="px-4 pt-4">
-                                <h4 class="mb-4"></h4>
+                                <h4 class="mb-4">Trade in Progress... <span class="circle red"></span></h4> 
                                 <div class="search-box chat-search-box">            
                                     <div class="input-group mb-3 rounded-3">
-                                        <span class="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
-                                            <i class="ri-search-line search-icon font-size-18"></i>
-                                        </span>
-                                        <input type="text" class="form-control bg-light" placeholder="Search messages or users" aria-label="Search messages or users" aria-describedby="basic-addon1">
+                                        <h5> Please amke a payment of 100ksh using M-Pesa</h5>
+                                       
                                     </div> 
                                 </div> <!-- Search Box-->
+
+                                <p style="font-weight: 100; ">1MTN will be added to your wallet</p>
+                                <hr>
                             </div> <!-- .p-4 -->
     
                         </div>
