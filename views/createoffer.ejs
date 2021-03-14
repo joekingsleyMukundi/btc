@@ -2,7 +2,7 @@
 <html lang="en">
 
 
-<!-- Mirrored from demo.qkit.io/tendex/wallet.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 13 Jan 2021 12:09:22 GMT -->
+<!-- Mirrored from demo.qkit.io/tendex/settings-application.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 13 Jan 2021 12:09:25 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,118 +192,121 @@
 </div>
 
     <div class="content-body">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                    <div class="wallet-widget card">
-                        <h5>Estimated Balance</h5>
-                        <h2><span class="text-primary">0.000</span> <sub>USD</sub></h2>
-                        <p>= 0.000000 BTC</p>
+                <div class="col-xxl-12">
+                    <div class="page-title">
+                        <h4>Offers</h4>
                     </div>
-                </div>
-                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                    <div class="wallet-widget card">
-                        <h5>Available Balance</h5>
-                        <h2><span class="text-success">0.000</span> <sub>USD</sub></h2>
-                        <p>= 0.000000 BTC</p>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                    <div class="wallet-widget card">
-                        <h5>Pending Balance</h5>
-                        <h2><span class="text-warning">0.000</span> <sub>USD</sub></h2>
-                        <p>= 0.000000 BTC</p>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                    <div class="wallet-widget card">
-                        <h5>Locked Balance</h5>
-                        <h2><span class="text-danger">0.000</span> <sub>USD</sub></h2>
-                        <p>= 0.000000 BTC</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-xxl-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Wallet Addresses </h4>
+                            <div class="settings-menu">
+                  <a href="#">Offers creation</a>
+</div>
                         </div>
                         <div class="card-body">
+                            <div class="row">
+                                <div class="col-xxl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Create Offer</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="#">
+                                                <div class="row g-3">
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Transaction Type</label>
+                                                        <select class="form-select">
+                                                            <option value="buy">Buy</option>
+                                                            <option value="sell">Sell</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Language Default</label>
+                                                        <select class="form-select">
+                                                            <option value="">English</option>
+                                                            <option value="">Bangla</option>
+                                                            <option value="">Hindi</option>
+                                                        </select>
+                                                    </div>
+                                                   
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Payment Metthod</label>
+                                                        <select class="form-select">
+                                                            <option value="bank">Bank</option>
+                                                            <option value="M-pesa">M-Pesa</option>
+                                                            <option value="PayPal">PayPal</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">Currency</label>
+                                                        <select class="form-select">
+                                                        <option value="MTN">Meitner</option>
+                                                        <option value="LTN">Lotearn</option>
+                                                    </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label">Price in %</label>
+                                                        <div class="input-group">
+                                                            <select class="form-select" name="method">
+                                                                <option value="bank">Above Market Price</option>
+                                                                <option value="master">Below Market Price</option>
+                                                                <option value="master">Fixed Price</option>
+                                                            </select>
+                                                            <input type="text" id="price" name="currency_Price" class="form-control"placeholder="0.1% above market price">
+                                                                
+                                                        </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-striped responsive-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Coin Name</th>
-                                            <th>Address</th>
-                                            <th>QR</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="coin-name">
-                                                    <i class="cc BTC"></i>
-                                                    <span>Bitcoin</span>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="form-label">TradeSpeed</label>
+                                                        <select class="form-select">
+                                                        <option value="MTN">1min</option>
+                                                        <option value="LTN">5min<option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div><label class="form-label">Instructions</label></div>
+                                                        <textarea name="insructions"  cols="20" rows="2" placeholder='must be verified and must be serious'></textarea>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div><label class="form-label">limits</label></div>
+                                                        <input type="text" name="limits" placeholder="100-1200 USD">
+                                                    </div>
                                                 </div>
-                                            </td>
-                                            <td>35Hb5B6qJa5ntYaNFN3hGYXdAjh919g2VH</td>
-                                            <td>
-                                                <img class="qr-img" src="images/qr.svg" alt="" width="40">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Other settings</h4>
+                                        </div>
+                                        <div class="card-body">
+                                                <div class="col-lg-6">
+                                                    <div class="form-check form-switch mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="s1" checked>
+                                                        <label class="form-check-label" for="s1">I send or receive
+                                                            digital currency with no negotiations</label>
+                                                    </div>
+                                                    <div class="form-check form-switch mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="s2" checked>
+                                                        <label class="form-check-label" for="s2">Limited Offer</label>
+                                                    </div>
+                                                    <div class="form-check form-switch mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="s3" checked>
+                                                        <label class="form-check-label" for="s3">Open For Negotiations</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <button class="btn btn-success waves-effect">Create</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                
-
-                <div class="col-xxl-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Balance </h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped responsive-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Asset</th>
-                                            <th>Balance</th>
-                                            <th>Available</th>
-                                            <th>Locked</th>
-                                            <th>% Gain</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="coin-name">
-                                                <i class="cc BTC"></i>
-                                                <span>Bitcoin</span>
-                                            </td>
-                                            <td>
-                                                0
-                                            </td>
-                                            <td>
-                                                >0
-                                            </td>
-                                            <td>
-                                                0
-                                            </td>
-                                            <td class="success-arrow">
-                                                <strong>0.005%</strong>
-                                                <i class="bi bi-arrow-up-short ms-2"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -314,21 +317,10 @@
 </div>
 
 
-
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 
-<script src="vendor/apexchart/apexcharts.min.js"></script>
-<script src="js/plugins/apex-price.js"></script>
-
-
-
-
-
-
-<script src="vendor/basic-table/jquery.basictable.min.js"></script>
-<script src="js/plugins/basic-table-init.js"></script>
 
 
 
@@ -337,7 +329,9 @@
 
 
 
-<script src="js/dashboard.js"></script>
+
+
+
 
 
 
@@ -349,5 +343,5 @@
 </body>
 
 
-<!-- Mirrored from demo.qkit.io/tendex/wallet.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 13 Jan 2021 12:09:24 GMT -->
+<!-- Mirrored from demo.qkit.io/tendex/settings-application.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 13 Jan 2021 12:09:25 GMT -->
 </html>

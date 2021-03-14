@@ -107,6 +107,8 @@ blockchainModel().find({}, (err, chain) => {
     } else {
       console.log(`its already registered`);
     }
+  } else {
+    console.log(`err in saving blockchain instance is ${err}`);
   }
 });
 //routes
@@ -127,7 +129,7 @@ app.get("/", (req, res) => {
         });
       }
     });
-    nodeUrl = `http://localhost:3000/node/${req.user.id}`;
+    nodeUrl = `http://www.meitneriumtrade.com/node/${req.user.id}`;
     blockchainModel().find({}, (err, chains) => {
       if (!err) {
         if (chains.length !== 0) {
@@ -146,9 +148,9 @@ app.get("/", (req, res) => {
                           if (networkNodes.includes(nodeUrl) === false) {
                             const msg = `There is  a new  node ${nodeUrl} requesting to be registered check your email`;
                             networkNodes.forEach((networkNode) => {
-                              const id = networkNode.substr(27);
+                              const id = networkNode.substr(36);
                               userModel().findById(
-                                { _id: id },
+                                { _id: req.user.id },
                                 (err, foundeNodeUser) => {
                                   if (!err) {
                                     if (foundeNodeUser) {
@@ -203,7 +205,7 @@ app.get("/", (req, res) => {
 //register nodes
 app.get("/register-node/node/:id", (req, res) => {
   const id = req.params.id;
-  const nodeToRegister = `http://localhost:3000/node/${id}`;
+  const nodeToRegister = `http://www.meitneriumtrade.com/node/${id}`;
   userModel().findById({ _id: id }, (err, user) => {
     if (!err) {
       if (user) {
@@ -543,6 +545,24 @@ app.post("/transaction", (req, res) => {
   }
 });
 
+app.get("/selloffers", (req, res) => {
+  res.render("selloffers");
+});
+app.get("/buyoffers", (req, res) => {
+  res.render("buyoffers");
+});
+
+app.get("/createoffer", (req, res) => {
+  res.render("createoffer");
+});
+
+app.get("/price-details", (req, res) => {
+  res.render("price-details");
+});
+
+app.get("/chat", (req, res) => {
+  res.render("chat");
+});
 const miner = () => {
   blockchainModel().find({}, (err, blockchainArry) => {
     if (err) {
