@@ -11,5 +11,5 @@ const GENESIS_BLOCK = {
   hash: hasher(Date.now(), process.env.LASTHASH),
 };
 
-const startingBalance = 1000;
+const startingBalance = 0;
 module.exports = { GENESIS_BLOCK, startingBalance };

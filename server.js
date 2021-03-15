@@ -19,6 +19,8 @@ const {
   blockchainModel,
 } = require("./DB/DBconfig");
 const { generator } = require("./config/config");
+const timer = require("./config/timeGet");
+const GnDbInserter = require("./config/genesisDb");
 const { loginMailer } = require("./sendmail/sendmail");
 const Transaction = require("./wallet/transactions");
 const Blockchain = require("./blockchain/blockchain");
@@ -54,6 +56,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(require("flash")());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -74,43 +77,7 @@ passport.deserializeUser(function (id, done) {
 });
 
 //saving blochain insttance to the db
-blockchainModel().find({}, (err, chain) => {
-  if (!err) {
-    if (chain.length === 0) {
-      const Blockchain = blockchainModel();
-      let blockchainObject;
-      Meitnerium.chain.forEach((Meitneri) => {
-        blockchainObject = {
-          chain: [
-            {
-              index: Meitneri.index,
-              timestamp: Meitneri.timestamp,
-              data: Meitneri.data,
-              lastHash: Meitneri.lastHash,
-              hash: Meitneri.hash,
-              nonce: Meitneri.nonce,
-              difficulty: Meitneri.difficulty,
-            },
-          ],
-        };
-      });
-      const blockchain = new Blockchain({
-        blockchain: blockchainObject,
-      });
-      blockchain.save((err) => {
-        if (!err) {
-          console.log(`succefully made the chain ${blockchainObject}`);
-        } else {
-          console.log(`err is ${err}`);
-        }
-      });
-    } else {
-      console.log(`its already registered`);
-    }
-  } else {
-    console.log(`err in saving blockchain instance is ${err}`);
-  }
-});
+GnDbInserter();
 //routes
 // landing pg
 app.get("/", (req, res) => {
@@ -121,11 +88,13 @@ app.get("/", (req, res) => {
         res.render("index", {
           authenticated: true,
           wallet: true,
+          message: req.flash("message"),
         });
       } else {
         res.render("index", {
           authenticated: true,
           wallet: false,
+          message: req.flash("message"),
         });
       }
     });
@@ -146,11 +115,12 @@ app.get("/", (req, res) => {
                         const networkNodes = chain.blockchain.networkNodes;
                         if (networkNodes.length !== 0) {
                           if (networkNodes.includes(nodeUrl) === false) {
+                            const currenttime = timer();
                             const msg = `There is  a new  node ${nodeUrl} requesting to be registered check your email`;
                             networkNodes.forEach((networkNode) => {
                               const id = networkNode.substr(36);
                               userModel().findById(
-                                { _id: req.user.id },
+                                { _id: id },
                                 (err, foundeNodeUser) => {
                                   if (!err) {
                                     if (foundeNodeUser) {
@@ -161,7 +131,14 @@ app.get("/", (req, res) => {
                                       );
                                       userModel().updateOne(
                                         { _id: id },
-                                        { $push: { notifications: msg } },
+                                        {
+                                          $push: {
+                                            notifications: {
+                                              msg: msg,
+                                              time: currenttime,
+                                            },
+                                          },
+                                        },
                                         (err) => {
                                           if (!err) {
                                             console.log(
@@ -199,6 +176,7 @@ app.get("/", (req, res) => {
   } else {
     res.render("index", {
       authenticated: false,
+      message: req.flash("message"),
     });
   }
 });
@@ -248,12 +226,14 @@ app.get("/register-node/node/:id", (req, res) => {
                       } else {
                         confirmNodeReg(user.email, user.username);
                         console.log("success in update");
+                        req.flash("message", "new node accepted succefully");
                         res.redirect("/");
                       }
                     }
                   );
                 } else {
                   console.log("not yet accepted");
+                  req.flash("message", "new node accepted succefully");
                   res.redirect("/");
                 }
                 console.log(newNumberOfAcceptees);
@@ -283,12 +263,14 @@ app.get("/register-node/node/:id", (req, res) => {
                       } else {
                         confirmNodeReg(user.email, user.username);
                         console.log("success in update");
+                        req.flash("message", "new node accepted succefully");
                         res.redirect("/");
                       }
                     }
                   );
                 } else {
                   console.log("not yet accepted");
+                  req.flash("message", "new node accepted succefully");
                   res.redirect("/");
                 }
               }
@@ -359,6 +341,7 @@ app.get("/dashboard", (req, res) => {
     if (result !== undefined) {
       nodeAddress = req.user.wallet.publicKey;
       res.render("dashboard", { user: req.user });
+      console.log(req.user.notifications);
     } else {
       res.redirect("/");
     }
@@ -562,6 +545,16 @@ app.get("/price-details", (req, res) => {
 
 app.get("/chat", (req, res) => {
   res.render("chat");
+});
+
+app.get("/profile", (req, res) => {
+  res.render("profile");
+});
+app.get("/settings-profile", (req, res) => {
+  res.render("settings-profile");
+});
+app.get("/settings-activity", (req, res) => {
+  res.render("settings-activity");
 });
 const miner = () => {
   blockchainModel().find({}, (err, blockchainArry) => {

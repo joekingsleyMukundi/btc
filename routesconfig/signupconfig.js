@@ -6,11 +6,13 @@ const {
   userModel,
 } = require("../DB/DBconfig");
 const { generator, UNIQID } = require("../config/config");
+const timer = require("../config/timeGet");
 const { signUpMailer } = require("../sendmail/sendmail");
 
 const signUp = (req, res) => {
   let otp = generator();
   let uniqId = UNIQID();
+  let currentTime = timer();
   userModel().register(
     {
       username: req.body.username,
@@ -20,6 +22,10 @@ const signUp = (req, res) => {
       emailstatus: "not verified",
       country: req.body.country,
       nodeAcceptance: "0",
+      notifications: {
+        msg: "Account created succefully",
+        time: currentTime,
+      },
     },
     req.body.password,
     (err, user) => {

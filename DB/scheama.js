@@ -20,7 +20,12 @@ const userSchema = new mongoose.Schema({
     s: String,
     recoveryParam: Number,
   },
-  notifications: [String],
+  notifications: [
+    {
+      msg: String,
+      time: String,
+    },
+  ],
   nodeAcceptance: String,
 });
 const cstorageSchema = new mongoose.Schema({

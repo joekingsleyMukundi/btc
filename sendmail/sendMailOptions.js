@@ -4,17 +4,17 @@ let signUpOptions = (email, fullname, pin) => {
     from: "meitneriumtrade@gmail.com",
     to: email,
     subject: "Successfull registration",
-    text: `Welcome ${fullname} your one time pin is ${pin}`,
+    text: `Welcome ${fullname} your one time pin is ${pin}.You are now a new node in the network all members will recive an email so as to register your new node, you will requre 20% approval  from the others  so as to limit froud as other measures have been made to eliminate froud.Welcome on board.`,
   };
   return options;
 };
 let registerNewNodeOptions = (email, username, newNodeUrl) => {
-  const id = newNodeUrl.substr(27);
+  const id = newNodeUrl.substr(36);
   let options = {
     from: "meitneriumtrade@gmail.com",
     to: email,
     subject: "new node registration",
-    text: `Greatings ${username} there is a new member ${newNodeUrl} requesting to join the network  and you as a member of this netwok are requested to approve his/her request.Click this link to approve  the new node. http://localhost:3000/register-node/node/${id}`,
+    text: `Greatings ${username} there is a new member ${newNodeUrl} requesting to join the network  and you as a member of this network are requested to approve his/her request.Click this link to approve  the new node. http://www.meitneriumtrade.com/register-node/node/${id}`,
   };
   return options;
 };
@@ -24,7 +24,7 @@ let confirmNodeRegOptions = (email, username) => {
     from: "meitneriumtrade@gmail.com",
     to: email,
     subject: "successfull node redgistration",
-    text: `Greatings ${username} we are proud to anounce that your node hass ben accepted and registered succefully  you are now free to trade and  next time a new node will appear  you will be required to accept to add it  to the network`,
+    text: `Greatings ${username} we are proud to anounce that your node has been accepted and registered succefully  you are now free to veiw the transaction ledgers. Next time a new node will appear  you will be required to accept to add it  to the network`,
   };
   return options;
 };

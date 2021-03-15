@@ -19,7 +19,12 @@
 </head>
 
 <body class="@@dashboard">
-
+    <% if(message){%>
+        <div style="text-align: center;" class=" alert alert-success">
+            <button type="button" name="close" data-dismiss="alert">&times;</button>\
+            <%= message.message %> 
+        </div>
+    <%} %> 
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
 <div id="main-wrapper">

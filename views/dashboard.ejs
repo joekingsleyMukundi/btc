@@ -54,48 +54,19 @@
                                 <span><i class="bi bi-bell"></i></span>
                             </div>
                             <div class="dropdown-menu dropdown-menu-right notification-list">
-                                <h4>Announcements</h4>
+                                <h4>Notifications</h4>
                                 <div class="lists">
-                                    <a href="#" class="">
-                                        <div class="d-flex align-items-center">
-                                            <span class="me-3 icon success"><i class="bi bi-check"></i></span>
-                                            <div>
-                                                <p>Account created successfully</p>
-                                                <span>2020-11-04 12:00:23</span>
+                                    <% user.notifications.forEach(notice=>{%>
+                                        <a href="#" class="">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3 icon success"><i class="bi bi-check"></i></span>
+                                                <div>
+                                                    <p><%= notice.msg %> </p>
+                                                    <span><%= notice.time %> </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="">
-                                        <div class="d-flex align-items-center">
-                                            <span class="me-3 icon fail"><i class="bi bi-x"></i></span>
-                                            <div>
-                                                <p>2FA verification failed</p>
-                                                <span>2020-11-04 12:00:23</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="">
-                                        <div class="d-flex align-items-center">
-                                            <span class="me-3 icon success"><i class="bi bi-check"></i></span>
-                                            <div>
-                                                <p>Device confirmation completed</p>
-                                                <span>2020-11-04 12:00:23</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="">
-                                        <div class="d-flex align-items-center">
-                                            <span class="me-3 icon pending"><i
-                                                    class="bi bi-exclamation-triangle"></i></span>
-                                            <div>
-                                                <p>Phone verification pending</p>
-                                                <span>2020-11-04 12:00:23</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="settings-activity.html">More <i
-                                            class="icofont-simple-right"></i></a>
+                                        </a>
+                                    <%}) %> 
 
                                 </div>
                             </div>
@@ -103,15 +74,15 @@
 
                         <div class="profile_log dropdown">
                             <div class="user" data-toggle="dropdown">
-                                <span class="thumb"><img src="images/profile/2.png" alt=""></span>
+                                <span class="thumb"><img style="border-radius: 50%;" src="images/profile/profile.png" alt=""></span>
                                 <span class="arrow"><i class="icofont-angle-down"></i></span>
                             </div>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="user-email">
                                     <div class="user">
-                                        <span class="thumb"><img src="images/profile/2.png" alt=""></span>
+                                        <span class="thumb"><img  style="border-radius: 50%;" src="images/profile/profile.png" alt=""></span>
                                         <div class="user-info">
-                                            <h5><%= user.uniqueId %> </h5>
+                                            <h5><%= user.username %> </h5>
                                             <span><%= user.email %> </span>
                                         </div>
                                     </div>
@@ -123,26 +94,23 @@
                                         <span> MTN</span>
                                     </div>
                                     <div class="total">
-                                        <p><%= user.wallet.balance * 500 %> </p>
+                                        <p><%= user.wallet.balance * 0.234 %> </p>
                                         <span>KSH</span>
                                     </div>
                                 </div>
-                                <a href="profile.html" class="dropdown-item">
+                                <a href="/profile" class="dropdown-item">
                                     <i class="bi bi-person"></i>Profile
                                 </a>
-                                <a href="wallet.html" class="dropdown-item">
+                                <a href="/wallet" class="dropdown-item">
                                     <i class="bi bi-wallet"></i>Wallet
                                 </a>
-                                <a href="settings-profile.html" class="dropdown-item">
+                                <a href="/settings-profile" class="dropdown-item">
                                     <i class="bi bi-gear"></i> Setting
                                 </a>
-                                <a href="settings-activity.html" class="dropdown-item">
+                                <a href="/settings-activity" class="dropdown-item">
                                     <i class="bi bi-clock-history"></i> Activity
                                 </a>
-                                <a href="lock.html" class="dropdown-item">
-                                    <i class="bi bi-lock"></i>Lock
-                                </a>
-                                <a href="signin.html" class="dropdown-item logout">
+                                <a href="/logout" class="dropdown-item logout">
                                     <i class="bi bi-power"></i> Logout
                                 </a>
                             </div>
@@ -179,16 +147,14 @@
                     <span><i class="bi bi-gear"></i></span>
                 </a>
             </li>
-            <li class="logout"><a href="signin.html" data-toggle="tooltip" data-placement="right"
+            <li class="logout"><a href="/logout" data-toggle="tooltip" data-placement="right"
                     title="Signout">
                     <span><i class="bi bi-power"></i></span>
                 </a>
             </li>
         </ul>
 
-        <p class="copyright">
-            &#169; <a href="#">Qkit</a>
-        </p>
+        
     </div>
 </div>
 
@@ -201,7 +167,7 @@
                 <div class="col-xl-12">
                     <div class="page-title-content">
                         <p>Welcome,
-                            <strong> <%= user.uniqueId %>  !</strong>
+                            <strong> <%= user.username %>  !</strong>
                         </p>
                     </div>
                 </div>
@@ -214,7 +180,7 @@
                             <div class="card welcome-profile">
                                 <div class="card-body">
                                     <img src="images/profile/2.png" alt="">
-                                    <h4>Hi, <%= user.uniqueId %> !</h4>
+                                    <h4>Hi, <%= user.username %> !</h4>
                                     <p>Wellcome to the dashboard,You can monitor your growth and create your very own crypto portfolio.Trust.</p>
 
                                     <ul>
@@ -247,7 +213,7 @@
                                     <h4 class="card-title">Quick Trade </h4>
                                 </div>
                                 <div class="card-body">
-                                    <form method="post" name="myform" class="currency_validate trade-form row g-3">
+                                    <form method="post" action="/trade/offers" name="myform" class="currency_validate trade-form row g-3">
                                         <div class="col-12">
                                             <label class="form-label">You Send</label>
                                             <div class="input-group">
@@ -293,7 +259,7 @@
                                         <p class="mb-0">1 MTN = 100KSH <a href="#">Expected rate <br>No extra
                                                 fees</a></p>
 
-                                        <button type="submit" name="submit" class="btn btn-primary btn-block">Exchange
+                                        <button type="submit" name="submit"  class="btn btn-primary btn-block">Exchange
                                             Now</button>
 
                                     </form>
