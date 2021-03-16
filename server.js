@@ -3,6 +3,7 @@ const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cron = require("node-cron");
 const signUp = require("./routesconfig/signupconfig");
 const login = require("./routesconfig/loginconfig");
 const otpAuth = require("./routesconfig/otpverification");
@@ -20,7 +21,9 @@ const {
 } = require("./DB/DBconfig");
 const { generator } = require("./config/config");
 const timer = require("./config/timeGet");
+const miner = require("./config/miner");
 const GnDbInserter = require("./config/genesisDb");
+const coinValue = require("./config/value");
 const { loginMailer } = require("./sendmail/sendmail");
 const Transaction = require("./wallet/transactions");
 const Blockchain = require("./blockchain/blockchain");
@@ -35,6 +38,7 @@ const {
   minerEmail,
 } = require("./sendmail/sendmail");
 const singIn = require("./routesconfig/loginconfig");
+const { overSight } = require("./meitnerium/miner");
 
 //creating our blockchaininstance
 
@@ -75,9 +79,13 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
-
+// get the coins
 //saving blochain insttance to the db
 GnDbInserter();
+//cron job
+cron.schedule("30 * * * * *", () => {
+  coinValue();
+});
 //routes
 // landing pg
 app.get("/", (req, res) => {
@@ -556,68 +564,9 @@ app.get("/settings-profile", (req, res) => {
 app.get("/settings-activity", (req, res) => {
   res.render("settings-activity");
 });
-const miner = () => {
-  blockchainModel().find({}, (err, blockchainArry) => {
-    if (err) {
-      console.log(err);
-    } else {
-      blockchainArry.forEach((blockchain) => {
-        const transactionPool = blockchain.blockchain.transactionPool;
-        const blockchainObj = blockchain.blockchain.chain;
-        if (transactionPool.length != 0) {
-          const transactions = [];
-          let transactionToPull;
-          transactionPool.forEach((transactionObject) => {
-            const transaction = {
-              id: transactionObject.id,
-              transactions: JSON.stringify(transactionObject.transactions),
-            };
-            transactions.push(transaction);
-            transactionToPull = {
-              id: transactionObject.id,
-              transactions: transactionObject.transactions,
-            };
-            blockchainModel().update(
-              {},
-              { $pull: { "blockchain.transactionPool": transactionToPull } },
-              (err) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                  console.log(
-                    `success in pulling transaction with id ${transactionToPull.id}`
-                  );
-                }
-              }
-            );
-          });
-          const len = blockchainObj.length;
-          const lastBlock = blockchainObj[len - 1];
-          const index = len + 1;
-          const newMinedBlock = addBlock(lastBlock, index, transactions);
-          console.log(newMinedBlock);
-          blockchainModel().update(
-            {},
-            { $push: { "blockchain.chain": newMinedBlock } },
-            (err) => {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log(`succefully added anew mined block  `);
-              }
-            }
-          );
-        } else {
-          console.log("no transaction");
-        }
-      });
-    }
-  });
-};
-
-setInterval(() => {
-  miner();
-}, 120000);
+app.get("/mine", (req, res) => {
+  miner(req, res);
+});
 
 const port = process.env.PORT || 3000;
 io.on("connection", (socket) => {

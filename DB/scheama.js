@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
 });
 const cstorageSchema = new mongoose.Schema({
   coins: [String],
+  value: Number,
 });
 
 const blockchainSchema = new mongoose.Schema({
@@ -80,5 +81,6 @@ const blockchainSchema = new mongoose.Schema({
     networkNodes: [String],
     liveNodesUrl: [String],
   },
+  totalTransactions: Number,
 });
 module.exports = { userSchema, cstorageSchema, blockchainSchema };

@@ -6,6 +6,8 @@ const {
   userModel,
   blockchainModel,
 } = require("../DB/DBconfig");
+const Blockchain = require("../blockchain/blockchain");
+const Meitnerium = new Blockchain();
 const genesisCreator = () => {
   blockchainModel().find({}, (err, chain) => {
     if (!err) {
@@ -29,6 +31,7 @@ const genesisCreator = () => {
         });
         const blockchain = new Blockchain({
           blockchain: blockchainObject,
+          totalTransactions: 0,
         });
         blockchain.save((err) => {
           if (!err) {

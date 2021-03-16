@@ -9,7 +9,6 @@ class Meitnerium {
     this.keyPair = ec.genKeyPair();
     this.hashKey = hasher(this.keyPair.getPublic().encode("hex"));
     this.hashId = hasher(this.id);
-    this.value = 100;
     this.timestamp = timestamp;
     this.hash = hash;
     this.nonce = nonce;

@@ -40,9 +40,10 @@ const miner = (deficit) => {
                 const timeDiffrence = coinTestTimestamp - PreviousCoinTimestamp;
                 if (timeDiffrence < mineRate) {
                   difficulty = coinTestDifficulty + 1;
-                  if (difficulty < 5) {
-                    difficulty = 5;
+                  if (difficulty < 4) {
+                    difficulty = 4;
                     const minedCoin = gen(difficulty);
+                    console.log("1 " + minedCoin);
                     cstorageModel().update(
                       {},
                       { $push: { coins: JSON.stringify(minedCoin) } },
@@ -56,6 +57,7 @@ const miner = (deficit) => {
                     );
                   } else {
                     const minedCoin = gen(difficulty);
+                    console.log("2 " + minedCoin);
                     cstorageModel().update(
                       {},
                       { $push: { coins: JSON.stringify(minedCoin) } },
@@ -70,8 +72,8 @@ const miner = (deficit) => {
                   }
                 } else if (timeDiffrence > mineRate) {
                   difficulty = coinTestDifficulty - 1;
-                  if (difficulty < 5) {
-                    difficulty = 5;
+                  if (difficulty < 4) {
+                    difficulty = 4;
                     const minedCoin = gen(difficulty);
                     cstorageModel().update(
                       {},
@@ -105,11 +107,6 @@ const miner = (deficit) => {
         });
         length++;
       }
-      cstorageModel().find({}, (err, foundArrys) => {
-        foundArrys.forEach((foundArry) => {
-          console.log(foundArry.coins.length);
-        });
-      });
     });
   });
 };
@@ -120,6 +117,7 @@ const initiator = (deficit) => {
       const Cstorage = cstorageModel();
       const coin = new Cstorage({
         coins: JSON.stringify(gen(process.env.INITIALVALUE)),
+        value: 0.05,
       });
       coin.save((err) => {
         if (err) {
@@ -129,12 +127,26 @@ const initiator = (deficit) => {
         }
       });
     } else {
-      console.log(
-        "there are some coins still in the bank so we will add some more"
-      );
-      miner(deficit);
+      cstorageModel().find({}, (err, foundArrys) => {
+        foundArrys.forEach((foundArry) => {
+          console.log(foundArry.coins.length);
+          if (foundArry.coins.length < deficit) {
+            miner(deficit);
+          } else if (foundArry.coins.length >= deficit) {
+            console.log("mined all coins");
+          }
+        });
+      });
     }
   });
 };
 
-module.exports = { initiator };
+const overSight = (coinsNeeded) => {
+  for (let i = 1; i < coinsNeeded; i++) {
+    setTimeout(function timer() {
+      initiator(i);
+    }, i * 10000);
+  }
+};
+
+module.exports = { overSight };
